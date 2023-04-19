@@ -1,4 +1,5 @@
 import subprocess
+import pyperclip
 
 use_file = input("Do you want to use the contents of in.txt? (y/n) ")
 if use_file.lower() == 'y':
@@ -6,6 +7,8 @@ if use_file.lower() == 'y':
         text = f.read()
 else:
     text = input("Please paste your text here: ")
+
+copy_to_clipboard = input("Do you want to copy the parts to the clipboard? (y/n) ")
 
 blocks = text.split('\n\n')
 output = []
@@ -40,3 +43,10 @@ with open('out.txt', 'w') as f:
             f.write(f"\n\n==============END OF PART {i}==============\n" + '\n' * 9)
         f.write(block)
     f.write(part_text)
+
+if copy_to_clipboard.lower() == 'y':
+    for i, block in enumerate(output):
+        pyperclip.copy(block + f"\n\n==============END OF PART {i+1}==============\n" + '\n' * 9)
+        print(f"Copied part {i+1} to clipboard. Press 'y' when ready to copy the next part.")
+        if input().lower() != 'y':
+            break
